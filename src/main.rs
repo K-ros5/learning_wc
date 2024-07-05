@@ -18,7 +18,7 @@ struct Args {
     )]
     bytes: bool,
 
-    //print the newline counts
+    ///print the newline counts
     #[arg(
         short,
         long,
@@ -28,7 +28,7 @@ struct Args {
     )]
     lines: bool,
 
-    //print the word counts
+    ///print the word counts
     #[arg(
         short,
         long,
@@ -38,7 +38,7 @@ struct Args {
     )]
     words: bool,
 
-    //print the character counts
+    ///print the character counts
     #[arg(
         short = 'm',
         long,
