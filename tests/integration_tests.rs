@@ -1,6 +1,10 @@
 #[cfg(test)]
 mod tests {
-    use std::process::Command;
+    use std::{
+        fs,
+        io::Write,
+        process::{Command, Stdio},
+    };
 
     #[test]
     fn byte_count() {
@@ -42,5 +46,32 @@ mod tests {
         let command_string = String::from_utf8(response).unwrap();
 
         assert_eq!(command_string, "58164 ./test_files/test.txt\n");
+    }
+
+    #[test]
+    fn check_stdin() {
+        let mut child = Command::new("./target/debug/learning_wc")
+            .arg("-c")
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("Binary not found?");
+
+        let mut stdin = child.stdin.take().expect("stdin failed");
+        std::thread::spawn(move || {
+            stdin
+                .write_all(
+                    fs::read_to_string("./test_files/test.txt")
+                        .expect("Couldn't read test file")
+                        .as_bytes(),
+                )
+                .expect("Failed to write to stdin");
+        });
+
+        let response = child.wait_with_output().expect("Failed to read stdout");
+
+        let command_string = String::from_utf8(response.stdout).unwrap();
+
+        assert_eq!(command_string, "342190\n");
     }
 }
