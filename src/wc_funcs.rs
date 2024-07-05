@@ -1,3 +1,8 @@
+pub fn get_characters_count(buf: &[u8]) -> usize {
+    let file_string = String::from_utf8_lossy(buf);
+    file_string.chars().count()
+}
+
 pub fn get_words_count(buf: &[u8]) -> usize {
     let file_string = String::from_utf8_lossy(buf);
     file_string.split_whitespace().count()
