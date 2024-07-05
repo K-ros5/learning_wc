@@ -43,7 +43,7 @@ struct Args {
 }
 
 //Both File and Stdin implement Read
-fn process_input(input: &mut impl Read, bytes: bool, lines: bool, words: bool) -> Vec<String> {
+fn process_input(input: &mut impl Read, bytes: bool, lines: bool, words: bool) -> String {
     let mut output: Vec<String> = Vec::new();
 
     let mut buf: Vec<u8> = Vec::new();
@@ -52,38 +52,38 @@ fn process_input(input: &mut impl Read, bytes: bool, lines: bool, words: bool) -
     let no_args = !bytes && !lines && !words;
 
     if bytes || no_args {
-        output.push(format!("{}", get_bytes_count(&buf)));
+        output.push(get_bytes_count(&buf).to_string());
     }
 
     if lines || no_args {
-        output.push(format!("{}", get_lines_count(&buf)));
+        output.push(get_lines_count(&buf).to_string());
     }
 
     if words || no_args {
-        output.push(format!("{}", get_words_count(&buf)));
+        output.push(get_words_count(&buf).to_string());
     }
 
-    output
+    output.join(" ")
 }
 
 fn main() {
     let cli = Args::parse();
+    let no_files = cli.file.is_none();
+    cli.file.inspect(|path| {
+        let path: PathBuf = path.iter().collect();
+        let mut file = File::open(&path);
 
-    if cli.file.is_some() {
-        cli.file.inspect(|path| {
-            let path: PathBuf = path.iter().collect();
-            let mut file = File::open(&path);
+        if let Ok(ref mut file) = &mut file {
+            let output = process_input(file, cli.bytes, cli.lines, cli.words);
+            println!("{} {}", output, &path.to_string_lossy())
+        } else {
+            println!("{}: Error opening file", &path.to_string_lossy())
+        }
+    });
 
-            if let Ok(ref mut file) = &mut file {
-                let output = process_input(file, cli.bytes, cli.lines, cli.words);
-                println!("{} {}", output.join(" "), &path.to_string_lossy())
-            } else {
-                println!("{}: Error opening file", &path.to_string_lossy())
-            }
-        });
-    } else {
+    if no_files {
         let mut stdin = std::io::stdin();
         let output = process_input(&mut stdin, cli.bytes, cli.lines, cli.words);
-        println!("{}", output.join(" "));
+        println!("{}", output);
     }
 }
