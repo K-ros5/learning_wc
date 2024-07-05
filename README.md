@@ -19,7 +19,7 @@ cargo uninstall learning_wc
 Usage: learning_wc [OPTIONS] [FILE]...
 
 Arguments:
-  [FILE]...  optional files
+  [FILE]...  optional files, if no files takes stdin input
 
 Options:
   -c, --bytes    print the byte counts

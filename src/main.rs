@@ -48,7 +48,7 @@ struct Args {
     )]
     chars: bool,
 
-    ///optional files
+    ///optional files, if no files takes stdin input
     file: Option<Vec<PathBuf>>,
 }
 
