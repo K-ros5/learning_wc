@@ -61,16 +61,17 @@ fn process_input(input: &mut impl Read, cli: &Args) -> String {
 
     let no_args = !cli.bytes && !cli.lines && !cli.words && !cli.chars;
 
-    if cli.bytes || no_args {
-        output.push(get_bytes_count(&buf).to_string());
-    }
-
+    //wc output with no args is "{lines} {words} {bytes}"
     if cli.lines || no_args {
         output.push(get_lines_count(&buf).to_string());
     }
 
     if cli.words || no_args {
         output.push(get_words_count(&buf).to_string());
+    }
+
+    if cli.bytes || no_args {
+        output.push(get_bytes_count(&buf).to_string());
     }
 
     if cli.chars {

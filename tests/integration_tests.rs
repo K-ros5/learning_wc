@@ -88,4 +88,17 @@ mod tests {
 
         assert_eq!(command_string, "339292 ./test_files/test.txt\n");
     }
+
+    #[test]
+    fn no_options_but_file() {
+        let response = Command::new("./target/debug/learning_wc")
+            .arg("./test_files/test.txt")
+            .output()
+            .expect("Binary not found?")
+            .stdout;
+
+        let command_string = String::from_utf8(response).unwrap();
+
+        assert_eq!(command_string, "7145 58164 342190 ./test_files/test.txt\n");
+    }
 }

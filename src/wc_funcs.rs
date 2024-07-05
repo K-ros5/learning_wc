@@ -53,4 +53,18 @@ mod tests {
         byte_buf.clear();
         assert_eq!(get_words_count(&byte_buf), 0);
     }
+
+    #[test]
+    pub fn get_characters_count_valid_count() {
+        let char_buf: Vec<char> = vec!['a'; 5];
+        let string_buf = char_buf.iter().collect::<String>();
+
+        let mut byte_buf: Vec<u8> = string_buf.into_bytes();
+
+        assert_eq!(get_bytes_count(&byte_buf), 5);
+
+        //check for zero length
+        byte_buf.clear();
+        assert_eq!(get_bytes_count(&byte_buf), 0);
+    }
 }
