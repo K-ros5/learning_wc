@@ -61,10 +61,10 @@ mod tests {
 
         let mut byte_buf: Vec<u8> = string_buf.into_bytes();
 
-        assert_eq!(get_bytes_count(&byte_buf), 5);
+        assert_eq!(get_characters_count(&byte_buf), 5);
 
         //check for zero length
         byte_buf.clear();
-        assert_eq!(get_bytes_count(&byte_buf), 0);
+        assert_eq!(get_characters_count(&byte_buf), 0);
     }
 }
